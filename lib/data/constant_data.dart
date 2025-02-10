@@ -15,3 +15,7 @@ class KTextStyle {
     fontSize: 16,
   );
 }
+
+class Env {
+  static const String baseUrl = "http://localhost:12000/api/";
+}

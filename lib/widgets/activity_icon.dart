@@ -5,6 +5,7 @@ IconData getActivityIcon(String type) {
     case 'recreational':
       return Icons.category;
     case 'education':
+    case 'educational':
       return Icons.school;
     case 'social':
       return Icons.group;

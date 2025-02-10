@@ -3,10 +3,16 @@ import 'package:try_this/data/classes/activity_class.dart';
 import 'package:try_this/data/constant_data.dart';
 import 'package:try_this/widgets/activity_icon.dart';
 
-class ActivityWidget extends StatelessWidget {
+class ActivityWidget extends StatefulWidget {
   final Activity activity;
-
   const ActivityWidget({Key? key, required this.activity}) : super(key: key);
+
+  @override
+  State<ActivityWidget> createState() => _ActivityWidgetState();
+}
+
+class _ActivityWidgetState extends State<ActivityWidget> {
+  bool isBookMarked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +23,30 @@ class ActivityWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              activity.activity,
-              style: KTextStyle.titleText,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Flexible(
+                  child: Text(
+                    widget.activity.activity,
+                    style: KTextStyle.titleText,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isBookMarked = !isBookMarked;
+                    });
+                  },
+                  child: isBookMarked
+                      ? Icon(Icons.bookmark_add_rounded)
+                      : Icon(Icons.bookmark_add_outlined),
+                ),
+              ],
             ),
             Text(
-              activity.description,
+              widget.activity.description,
               style: KTextStyle.descriptionText,
             ),
             const SizedBox(height: 8.0),
@@ -31,12 +55,12 @@ class ActivityWidget extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(getActivityIcon(activity.type)),
+                    Icon(getActivityIcon(widget.activity.type)),
                     SizedBox(
                       width: 5,
                     ),
                     Text(
-                      activity.type,
+                      widget.activity.type,
                       style: KTextStyle.bodyText,
                     ),
                   ],
@@ -46,21 +70,21 @@ class ActivityWidget extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    activity.participants > 1
+                    widget.activity.participants > 1
                         ? Icon(Icons.people)
                         : Icon(Icons.person),
                     SizedBox(
                       width: 5,
                     ),
                     Text(
-                      activity.participants.toString(),
+                      widget.activity.participants.toString(),
                       style: KTextStyle.bodyText,
                     ),
                   ],
                 ),
               ],
             ),
-            if (activity.link.isNotEmpty)
+            if (widget.activity.link.isNotEmpty)
               TextButton(
                 onPressed: () {
                   // Handle link navigation
