@@ -1,67 +1,76 @@
 import 'package:flutter/material.dart';
-import 'package:try_this/data/classes/activity_class.dart';
-import 'package:try_this/data/fetch/get_activity.dart';
-import 'package:try_this/widgets/activity_widget.dart';
-import 'package:try_this/widgets/theme_toggle_widget.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/route_manager.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  late Future<List<Activity>> futureActivites;
-  @override
-  void initState() {
-    super.initState();
-    futureActivites = fetchActivites();
-  }
-
-  Future<void> _refreshActivities() async {
-    // Fetch new data from the API
-    List<Activity> newActivities = await fetchActivites();
-    // Update the state with the new data
-    setState(() {
-      futureActivites = Future.value(newActivities);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Activites"),
-        actions: [ThemeToggleWidget()],
-      ),
-      body: FutureBuilder(
-        future: futureActivites,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            return Center(
-                child: Text(
-              snapshot.error.toString(),
-            ));
-          } else if (snapshot.hasData) {
-            final activities = snapshot.data ?? [];
-            return RefreshIndicator(
-              onRefresh: _refreshActivities,
-              child: ListView.builder(
-                itemCount: activities.length,
-                itemBuilder: (context, index) {
-                  return ActivityWidget(activity: activities[index]);
-                },
-              ),
-            );
-          } else {
-            return Center(child: Text('No activities found.'));
-          }
-        },
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 50.h),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Welcome to Try This! Discover Activities Personalised Just for You",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 24.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  height: 20.h,
+                ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20.w),
+                  child: Image.asset(
+                    "assets/images/onboard1.webp",
+                    fit: BoxFit.cover,
+                    height: 390.h,
+                  ),
+                ),
+                SizedBox(
+                  height: 50.h,
+                ),
+                Text(
+                  "Tell us a little about yourself, and we'll suggest activities you'll love.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 18.w, fontWeight: FontWeight.w500),
+                ),
+                SizedBox(
+                  height: 20.h,
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueAccent,
+                    minimumSize: Size(
+                        double.infinity, 50.h), // Full width, responsive height
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(8.r), // Less rounded corners
+                    ),
+                  ),
+                  onPressed: () {
+                    Get.toNamed("/topics");
+                  },
+                  child: Text(
+                    "Get Started",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.sp, // Responsive font size
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
