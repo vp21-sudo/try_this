@@ -1,9 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TopicsPage extends StatefulWidget {
-  const TopicsPage({super.key});
+  final String type;
+  const TopicsPage({
+    super.key,
+    this.type = "Continue",
+  });
 
   @override
   State<TopicsPage> createState() => _TopicsPageState();
@@ -19,7 +26,6 @@ class _TopicsPageState extends State<TopicsPage> {
     "cooking",
     "diy",
     "music",
-    "outdoor",
     "sports",
     "travel",
     "health",
@@ -30,9 +36,33 @@ class _TopicsPageState extends State<TopicsPage> {
     "reading",
     "writing",
     "meditation",
-    "random"
   ];
   List<String> selectedOptions = []; // Store selected options
+
+  // save selected topics
+  Future<void> _saveSelectedTopics() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString("selectedTopics", jsonEncode(selectedOptions));
+  }
+
+  Future<void> _loadSelectedTopics() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? storedTopics = prefs.getString("selectedTopics");
+
+    if (storedTopics != null) {
+      List<String> loadedTopics = List<String>.from(jsonDecode(storedTopics));
+
+      setState(() {
+        selectedOptions = loadedTopics;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSelectedTopics();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,8 +112,6 @@ class _TopicsPageState extends State<TopicsPage> {
                         }
                       });
                     },
-                    selectedColor: Colors.blue.shade100,
-                    backgroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       side: BorderSide(color: Colors.grey),
                       borderRadius: BorderRadius.circular(20.r),
@@ -104,38 +132,44 @@ class _TopicsPageState extends State<TopicsPage> {
                 ),
                 onPressed: () {
                   if (selectedOptions.length < 3) {
-                    Get.snackbar(
-                      "Selection Required", // Title
-                      "Please select at least three topics",
-                      titleText: Text(
-                        "Selection Required",
-                        style: TextStyle(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                      messageText: Text(
+                    if (!Get.isSnackbarOpen) {
+                      Get.snackbar(
+                        "Selection Required", // Title
                         "Please select at least three topics",
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w500,
+                        titleText: Text(
+                          "Selection Required",
+                          style: TextStyle(
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
-                      ),
-                      icon: Icon(Icons.error,
-                          color: Colors.black, size: 24.sp), // Add icon
-                      snackPosition: SnackPosition.TOP,
-                      margin: EdgeInsets.only(
-                          bottom: 20.h, left: 16.w, right: 16.w),
-                      snackStyle: SnackStyle.FLOATING,
-                      isDismissible: true,
-                      duration: Duration(milliseconds: 1500),
-                    );
+                        messageText: Text(
+                          "Please select at least three topics",
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        icon: Icon(Icons.error, size: 24.sp), // Add icon
+                        snackPosition: SnackPosition.TOP,
+                        margin: EdgeInsets.only(
+                            bottom: 20.h, left: 16.w, right: 16.w),
+                        snackStyle: SnackStyle.FLOATING,
+                        isDismissible: false,
+                        duration: Duration(milliseconds: 1500),
+                      );
+                    }
                   } else {
-                    Get.toNamed("/preferences");
+                    _saveSelectedTopics();
+                    if (widget.type == "Continue") {
+                      Get.toNamed("/preferences");
+                    } else {
+                      Get.back();
+                    }
                   }
                 },
                 child: Text(
-                  "Continue",
+                  widget.type,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18.sp,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:try_this/data/classes/activity_class.dart';
 import 'package:try_this/data/constant_data.dart';
+import 'package:try_this/utils/url.dart';
 import 'package:try_this/widgets/activity_icon.dart';
 
 class ActivityWidget extends StatefulWidget {
@@ -86,9 +87,7 @@ class _ActivityWidgetState extends State<ActivityWidget> {
             ),
             if (widget.activity.link.isNotEmpty)
               TextButton(
-                onPressed: () {
-                  // Handle link navigation
-                },
+                onPressed: () => launchURL(widget.activity.link),
                 child: const Text('Learn More'),
               ),
           ],

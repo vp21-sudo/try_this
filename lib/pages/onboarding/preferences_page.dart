@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PreferencesPage extends StatefulWidget {
-  const PreferencesPage({super.key});
+  final String type;
+  const PreferencesPage({
+    super.key,
+    this.type = "Submit",
+  });
 
   @override
   State<PreferencesPage> createState() => _PreferencesPageState();
@@ -12,9 +17,35 @@ class PreferencesPage extends StatefulWidget {
 class _PreferencesPageState extends State<PreferencesPage> {
   // State variables for selections
   String soloGroup = "Solo";
-  String indoorOutdoor = "Indoors";
+  String indoorOutdoor = "Both";
   String intensity = "Relaxing";
   String timeCommitment = "Short (Under 1 hour)";
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPreferences();
+  }
+
+  Future<void> _loadPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      soloGroup = prefs.getString("soloGroup") ?? "Solo";
+      indoorOutdoor = prefs.getString("indoorOutdoor") ?? "Both";
+      intensity = prefs.getString("intensity") ?? "Relaxing";
+      timeCommitment =
+          prefs.getString("timeCommitment") ?? "Short (Under 1 hour)";
+    });
+  }
+
+  Future<void> _savePreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("soloGroup", soloGroup);
+    prefs.setString("indoorOutdoor", indoorOutdoor);
+    prefs.setString("intensity", intensity);
+    prefs.setString("timeCommitment", timeCommitment);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +73,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
               SizedBox(height: 10.h),
               Text(
                 "Help us fine-tune your recommendations by telling us your preferred activity style.",
-                style: TextStyle(fontSize: 16.sp, color: Colors.grey[700]),
+                style: TextStyle(fontSize: 16.sp, color: Colors.grey[500]),
               ),
               SizedBox(height: 20.h),
 
@@ -114,15 +145,15 @@ class _PreferencesPageState extends State<PreferencesPage> {
                   ),
                   onPressed: () {
                     // Process selections and navigate
-                    print("Preferences Selected: ");
-                    print("Solo/Group: $soloGroup");
-                    print("Indoor/Outdoor: $indoorOutdoor");
-                    print("Intensity: $intensity");
-                    print("Time Commitment: $timeCommitment");
-                    Get.offAllNamed("/activities");
+                    _savePreferences();
+                    if (widget.type == "Submit") {
+                      Get.offAllNamed("/activities");
+                    } else {
+                      Get.back();
+                    }
                   },
                   child: Text(
-                    "Next",
+                    widget.type,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18.sp,
@@ -169,8 +200,6 @@ class _PreferencesPageState extends State<PreferencesPage> {
                     onChanged(option);
                   }
                 },
-                selectedColor: Colors.blue.shade100,
-                backgroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   side: BorderSide(color: Colors.grey),
                   borderRadius: BorderRadius.circular(10.r),

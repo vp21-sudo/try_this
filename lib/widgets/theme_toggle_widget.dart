@@ -14,10 +14,12 @@ class _ThemeToggleWidgetState extends State<ThemeToggleWidget> {
     return IconButton(
         onPressed: () {
           setState(() {
-            isDarkModeNotifier.value = !isDarkModeNotifier.value;
+            bool newTheme = !isDarkModeNotifier.value;
+            isDarkModeNotifier.value = newTheme;
+            saveThemePreference(newTheme);
           });
         },
-        icon: isDarkModeNotifier.value
+        icon: !isDarkModeNotifier.value
             ? Icon(Icons.dark_mode)
             : Icon(Icons.light_mode));
   }

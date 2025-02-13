@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/get_core.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:try_this/data/classes/activity_class.dart';
 import 'package:try_this/data/fetch/get_activity.dart';
 import 'package:try_this/widgets/activity_widget.dart';
-import 'package:try_this/widgets/theme_toggle_widget.dart';
 
 class ActivitiesPage extends StatefulWidget {
   const ActivitiesPage({super.key});
@@ -16,12 +17,12 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
   @override
   void initState() {
     super.initState();
-    futureActivites = fetchActivites();
+    futureActivites = fetchActivities();
   }
 
   Future<void> _refreshActivities() async {
     // Fetch new data from the API
-    List<Activity> newActivities = await fetchActivites();
+    List<Activity> newActivities = await fetchActivities();
     // Update the state with the new data
     setState(() {
       futureActivites = Future.value(newActivities);
@@ -33,7 +34,14 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Activites"),
-        actions: [ThemeToggleWidget()],
+        actions: [
+          IconButton(
+            onPressed: () {
+              Get.toNamed("/settings");
+            },
+            icon: Icon(Icons.settings),
+          ),
+        ],
         centerTitle: true,
       ),
       body: FutureBuilder(
