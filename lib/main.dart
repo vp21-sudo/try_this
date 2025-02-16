@@ -11,6 +11,8 @@ import 'package:try_this/pages/activities_page.dart';
 import 'package:try_this/pages/home_page.dart';
 import 'package:try_this/pages/onboarding/preferences_page.dart';
 import 'package:try_this/pages/onboarding/topics_page.dart';
+import 'package:try_this/pages/others/privacy_policy_page.dart';
+import 'package:try_this/pages/others/terms_and_conditions_page.dart';
 import 'package:try_this/pages/settings_page.dart';
 
 void main() async {
@@ -94,6 +96,18 @@ class _MyAppState extends State<MyApp> {
                 GetPage(
                   name: '/settings',
                   page: () => SettingsPage(),
+                  transition: Transition.cupertino,
+                  transitionDuration: Duration(milliseconds: 400),
+                ),
+                GetPage(
+                  name: '/terms',
+                  page: () => TermsAndConditionsPage(),
+                  transition: Transition.cupertino,
+                  transitionDuration: Duration(milliseconds: 400),
+                ),
+                GetPage(
+                  name: '/privacy',
+                  page: () => PrivacyPolicyPage(),
                   transition: Transition.cupertino,
                   transitionDuration: Duration(milliseconds: 400),
                 ),

@@ -54,21 +54,17 @@ class SettingsPage extends StatelessWidget {
                       title: "About",
                       icon: Icons.info_outline,
                       onTap: () => Get.snackbar("App Info", "Try This v1.0.0",
-                          snackPosition: SnackPosition.BOTTOM),
+                          snackPosition: SnackPosition.TOP),
                     ),
                     SettingsOptionWidget(
                       title: "Terms & Conditions",
                       icon: Icons.description,
-                      onTap: () => Get.snackbar("App Info", "Try This v1.0.0",
-                          snackPosition: SnackPosition.BOTTOM),
+                      onTap: () => (Get.toNamed("/terms")),
                     ),
                     SettingsOptionWidget(
-                      title: "Logout",
-                      icon: Icons.exit_to_app,
-                      onTap: () async {
-                        bool confirm = await _showLogoutDialog(context);
-                        if (confirm) _logout();
-                      },
+                      title: "Privacy Policy",
+                      icon: Icons.description,
+                      onTap: () => (Get.toNamed("/privacy")),
                     ),
                   ],
                 ),
@@ -76,13 +72,25 @@ class SettingsPage extends StatelessWidget {
               Center(
                 child: Padding(
                   padding: EdgeInsets.only(bottom: 10.h),
-                  child: Text(
-                    "App Version: v1.0.0",
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  child: Column(
+                    children: [
+                      SettingsOptionWidget(
+                        title: "Logout",
+                        icon: Icons.exit_to_app,
+                        onTap: () async {
+                          bool confirm = await _showLogoutDialog(context);
+                          if (confirm) _logout();
+                        },
+                      ),
+                      Text(
+                        "App Version: v1.0.0",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               )
