@@ -19,7 +19,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await loadThemePreference();
   String initialRoute = await getInitialRoute();
-  print(initialRoute);
   runApp(MyApp(initialRoute: initialRoute));
 }
 

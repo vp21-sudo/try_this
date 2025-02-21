@@ -1,4 +1,4 @@
-package com.example.try_this
+package com.sudovp.trythis
 
 import io.flutter.embedding.android.FlutterActivity
 

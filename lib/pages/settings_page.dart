@@ -53,18 +53,8 @@ class SettingsPage extends StatelessWidget {
                     SettingsOptionWidget(
                       title: "About",
                       icon: Icons.info_outline,
-                      onTap: () => Get.snackbar("App Info", "Try This v1.0.0",
+                      onTap: () => Get.snackbar("App Info", "Try This v1.0.2",
                           snackPosition: SnackPosition.TOP),
-                    ),
-                    SettingsOptionWidget(
-                      title: "Terms & Conditions",
-                      icon: Icons.description,
-                      onTap: () => (Get.toNamed("/terms")),
-                    ),
-                    SettingsOptionWidget(
-                      title: "Privacy Policy",
-                      icon: Icons.description,
-                      onTap: () => (Get.toNamed("/privacy")),
                     ),
                   ],
                 ),
@@ -83,7 +73,7 @@ class SettingsPage extends StatelessWidget {
                         },
                       ),
                       Text(
-                        "App Version: v1.0.0",
+                        "App Version: v1.0.2",
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 12.sp,

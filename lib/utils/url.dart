@@ -4,8 +4,5 @@ Future<void> launchURL(String url) async {
   Uri uri = Uri.parse(url);
   if (await canLaunchUrl(uri)) {
     await launchUrl(uri, mode: LaunchMode.externalApplication);
-  } else {
-    print(await canLaunchUrl(uri));
-    print("could not launch URL:$uri");
-  }
+  } else {}
 }
